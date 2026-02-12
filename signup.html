@@ -58,12 +58,13 @@
                 Already have an account? <a href="login.html">Sign In</a>
             </p>
         </div>
-        <a href="index.html" class="back-to-home">&larr; Back to Home</a>
+        <a href="index1.html" class="back-to-home">&larr; Back to Home</a>
     </div>
 
-    <!-- টগল পাসওয়ার্ড স্ক্রিপ্ট -->
+    <!-- UI Script for Toggle Password -->
     <script>
     const togglePasswordIcons = document.querySelectorAll('.toggle-password');
+
     togglePasswordIcons.forEach(icon => {
         icon.addEventListener('click', () => {
             const passwordInput = icon.previousElementSibling;
@@ -78,14 +79,12 @@
     });
     </script>
 
-    <!-- ফায়ারবেস এবং সাইনআপ লজিক -->
+    <!-- Firebase Logic -->
     <script type="module">
-        // প্রয়োজনীয় লাইব্রেরি ইম্পোর্ট
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // আপনার ফায়ারবেস কনফিগারেশন
         const firebaseConfig = {
             apiKey: "AIzaSyBHV3LF6IVV9j6Mbj45alh7ZM1umTt5T_s",
             authDomain: "it-collaboration-bd-d9d49.firebaseapp.com",
@@ -96,16 +95,16 @@
             measurementId: "G-MD3WBCZVLT"
         };
 
-        // ফায়ারবেস ইনিশিয়ালাইজ
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // সাইন আপ ইভেন্ট
+        // Sign Up Event Listener
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // পেজ রিলোড বন্ধ করা
 
-            // ভ্যালু নেওয়া
+            // ইনপুট ভ্যালু নেওয়া
             const fname = document.getElementById('fname').value;
             const lname = document.getElementById('lname').value;
             const email = document.getElementById('email-signup').value;
@@ -114,31 +113,35 @@
             const repassword = document.getElementById('repass-signup').value;
             const terms = document.getElementById('terms-check').checked;
 
-            // ভ্যালিডেশন
+            // পাসওয়ার্ড ম্যাচিং চেক
             if (password !== repassword) {
-                alert("Passwords do not match!");
+                alert("Passwords do not match! (পাসওয়ার্ড মিলছে না)");
                 return;
             }
+
+            // পাসওয়ার্ড লেংথ চেক (Firebase এর জন্য অন্তত ৬ সংখ্যা লাগে)
             if (password.length < 6) {
                 alert("Password must be at least 6 characters long.");
                 return;
             }
+
+            // টার্মস চেকবক্স চেক
             if (!terms) {
-                alert("Please agree to the Terms & Conditions.");
+                alert("Please agree to the Terms & Conditions first.");
                 return;
             }
 
             try {
-                // ১. ইউজার তৈরি করা
+                // ১. ফায়ারবেসে ইউজার তৈরি করা
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                // ২. নাম সেট করা
+                // ২. ইউজারের ডিসপ্লে নাম আপডেট করা
                 await updateProfile(user, {
                     displayName: fname + " " + lname
                 });
 
-                // ৩. ডাটাবেসে তথ্য রাখা
+                // ৩. অতিরিক্ত তথ্য ডাটাবেসে সেভ করা (Firestore)
                 await setDoc(doc(db, "users", user.uid), {
                     firstName: fname,
                     lastName: lname,
@@ -148,30 +151,27 @@
                     createdAt: new Date()
                 });
 
-                // ৪. ইমেইল ভেরিফিকেশন পাঠানো
-                await sendEmailVerification(user);
-
-                // ৫. ইউজারকে সাইন আউট করিয়ে দেওয়া (যাতে লগইন পেজে গিয়ে ভেরিফাই করে ঢুকতে হয়)
-                await signOut(auth);
-
-                // ৬. মেসেজ দিয়ে লগইন পেজে পাঠানো
-                alert("Account created! A verification link has been sent to " + email + ".\nPlease verify your email and then Login.");
+                // ৪. সফল হলে মেসেজ এবং রিডাইরেক্ট
+                alert("Account created successfully! Redirecting to Login page...\n (ইমেইল এবং পাসওয়ার্ড রিসেট করতে পারবেন না) \n (তাই একবার ব্যবহার করলে অবশ্যই সেটি মনে রাখবেন) \n (প্রয়োজনে whatsapp এ মেসেজ দিন) \n (লগইন বাটন এ ক্লিক করে লগইন পেজ এ লগইন করুন)");
                 
-                window.location.href = "login.html";
+                // লগইন পেজে নিয়ে যাওয়া
+                window.location.replace("login.html");
 
             } catch (error) {
-                // এরর হ্যান্ডলিং
+                // ৫. এরর হ্যান্ডলিং (Error Handling)
                 const errorCode = error.code;
+                
                 if (errorCode === 'auth/email-already-in-use') {
-                    alert("This email is already registered! Please use another email or Login.");
+                    alert("This email is already in use. Please use a different email or Log in.\n(এই ইমেইল দিয়ে ইতিমধ্যে একাউন্ট খোলা আছে।)\n (লগইন করুন)");
                 } else if (errorCode === 'auth/invalid-email') {
-                    alert("Invalid Email Address.");
+                    alert("Invalid Email Address.\n(ইমেইল এড্রেসটি সঠিক নয়।)");
                 } else if (errorCode === 'auth/weak-password') {
-                    alert("Password is too weak.");
+                    alert("Password is too weak.\n(পাসওয়ার্ডটি খুব দুর্বল, অন্তত ৬ সংখ্যার দিন।)");
                 } else {
+                    // অন্য কোনো সমস্যা হলে
                     alert("Error: " + error.message);
                 }
-                console.error(error);
+                console.error("Firebase Error:", error);
             }
         });
     </script>

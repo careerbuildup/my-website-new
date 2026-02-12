@@ -42,7 +42,7 @@
                 Don't have an account? <a href="signup.html">Sign Up</a>
             </p>
         </div>
-        <a href="index.html" class="back-to-home">&larr; Back to Home</a>
+        <a href="index1.html" class="back-to-home">&larr; Back to Home</a>
     </div>
 
     <!-- পাসওয়ার্ড টগল স্ক্রিপ্ট (আপনার অরিজিনাল) -->
@@ -95,10 +95,10 @@
                     // সফল লগইন হলে এখানে আসবে
                     // alert("Login Successful!"); 
                     // ড্যাশবোর্ড পেজে রিডাইরেক্ট (নতুন পেজ)
-                    window.location.href = "dashboard.html";
+                    window.location.href = "index.html";
                 })
                 .catch((error) => {
-                    alert("Login Failed: " + error.message);
+                    alert("Login Failed: wrong data fillup, ভুল তথ্য দিয়েছেন হয়তো" + error.message);
                 });
         });
 
@@ -108,16 +108,16 @@
             const email = document.getElementById('email-login').value;
 
             if (!email) {
-                alert("Please enter your email address in the box first to reset password.");
+                alert("Please enter your email address in the box first to reset password.\n (ইমেইল নাও যেতে পারে)");
                 return;
             }
 
             sendPasswordResetEmail(auth, email)
                 .then(() => {
-                    alert("Password reset email sent! Check your inbox.");
+                    alert("Password reset email sent! Check your inbox. \n (ইমেইল নাও যেতে পারে)");
                 })
                 .catch((error) => {
-                    alert("Error: " + error.message);
+                    alert("Error: (হয়তো ভুল তথ্য দিয়েছেন) " + error.message);
                 });
         });
     </script>
