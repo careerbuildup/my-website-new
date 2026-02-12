@@ -13,6 +13,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 15px; /* Added padding for very small screens */
 }
 
 .login-wrapper {
@@ -20,7 +21,6 @@ body {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    padding: 20px;
 }
 
 .login-container {
@@ -42,7 +42,7 @@ body {
 }
 
 .input-group {
-    position: relative;  /* ✅ important for icon positioning */
+    position: relative;
     margin-bottom: 25px;
 }
 
@@ -55,9 +55,10 @@ body {
     z-index: 10;
 }
 
+/* ✅ UPDATED: Added right padding to make space for the eye icon */
 .input-group input {
     width: 100%;
-    padding: 15px 20px 15px 50px; /* left padding for user/lock icon */
+    padding: 15px 50px 15px 50px; /* Right padding increased to 50px */
     border: none;
     background-color: #f8f9fa;
     border-radius: 12px;
@@ -77,16 +78,16 @@ body {
     color: #4263eb;
 }
 
-/* 🔑 Fix: toggle password icon */
+/* ✅ FIXED: Positioned the icon from the right, so it's always inside */
 .toggle-password {
     position: absolute;
-    left: 290px;      /* icon input field-এর ভিতরে বাম দিকে */
+    right: 50px; /* Positioned from the right edge of the parent */
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: #adb5bd;
     transition: color 0.3s ease;
-    z-index: 20;     /* clickable */
+    z-index: 20;
 }
 
 .toggle-password:hover {
@@ -99,6 +100,8 @@ body {
     align-items: center;
     margin-bottom: 30px;
     font-size: 11px;
+    flex-wrap: wrap; /* Allows items to wrap if screen is too small */
+    gap: 10px; /* Adds a small gap if they wrap */
 }
 
 .remember-me {
@@ -202,4 +205,19 @@ body {
     color: #4263eb;
     background-color: #f8f9fa;
     box-shadow: 5px 5px 10px #dee2e6, -5px -5px 10px #ffffff;
+}
+
+/* ✅ REMOVED the rule that stacked .options vertically */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 30px 25px;
+    }
+
+    .login-container h2 {
+        font-size: 20px;
+    }
+
+    .input-group input, .signin-btn {
+        font-size: 11px;
+    }
 }

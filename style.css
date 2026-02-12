@@ -11,8 +11,6 @@ body {
     font-family: 'Poppins', sans-serif;
     background-color: #ffffff;
     color: #495057;
-
-    /* ✅ NEW (footer fix) */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -21,12 +19,13 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 5px;
+    padding: 0 15px; /* Added more padding for smaller screens */
 }
 
 .header {
     background-color: #ffffff;
     padding: 10px 0;
+    position: relative; /* Needed for absolute positioning of mobile menu */
 }
 
 .navbar {
@@ -125,7 +124,14 @@ body {
                 inset -3px -3px 7px rgba(255, 255, 255, 0.1);
 }
 
-/* ✅ NEW */
+/* ✅ NEW: Hamburger Menu Styles */
+.hamburger-menu {
+    display: none; /* Hidden on desktop */
+    font-size: 20px;
+    cursor: pointer;
+    color: #000000;
+}
+
 .main-content {
     text-align: center;
     padding: 100px 0;
@@ -232,7 +238,6 @@ body {
     z-index: -1;
     pointer-events: none;
 }
-
 .bg-img {
     position: absolute;
     width: 600px;
@@ -241,7 +246,6 @@ body {
     background-repeat: no-repeat;
     opacity: 0.2;
 }
-
 .img1 {
     background-image: url("Vector1.png");
     top: 10%;
@@ -252,14 +256,115 @@ body {
     opacity: 0.05;
     filter: blur(0px);
 }
-
 .img2 {
     background-image: url("Vector2.png");
     transform: rotate(20deg) scale(1.2);
 }
-
 .img3 {
     background-image: url("Vector3.png");
     transform: rotate(-15deg) scale(0.8);
     opacity: 0.1;
+}
+
+/* ✅ NEW: Media Queries for Responsiveness */
+
+/* For tablets and smaller devices */
+@media (max-width: 992px) {
+    .hero-section h1 {
+        font-size: 48px;
+    }
+    .hero-section p {
+        font-size: 11px;
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+    .navbar {
+        flex-wrap: wrap; /* Allow items to wrap */
+        position: relative;
+    }
+
+    .hamburger-menu {
+        display: block; /* Show hamburger icon */
+        order: 3; /* Change order to appear after logo */
+    }
+
+    .auth-buttons {
+        order: 2; /* Keep auth buttons visible next to logo */
+    }
+
+    .nav-links {
+        display: none; /* Hide nav links by default */
+        flex-direction: column;
+        width: 100%;
+        background-color: #ffffff;
+        position: absolute;
+        top: 60px; /* Position below the navbar */
+        left: 0;
+        padding: 20px 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        border-radius: 0 0 8px 8px;
+        order: 4; /* Appear below everything else */
+    }
+    
+    .nav-links.active {
+        display: flex; /* Show when active */
+    }
+
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-links a {
+        padding: 15px;
+        display: block; /* Make link take full width */
+    }
+    
+    .auth-buttons {
+        gap: 8px;
+    }
+    
+    .login-btn, .signup-btn {
+        padding: 8px 15px;
+        font-size: 11px;
+    }
+
+    .main-content {
+        padding: 60px 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 36px;
+    }
+
+    .hero-section p {
+        font-size: 10px;
+        margin-bottom: 30px;
+    }
+
+    .footer-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 16px;
+    }
+
+    .hero-section h1 {
+        font-size: 28px;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 80%;
+    }
 }

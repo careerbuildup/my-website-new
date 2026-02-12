@@ -34,12 +34,17 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 5px;
+            padding: 0 15px; /* ছোট ডিভাইসের জন্য প্যাডিং */
         }
 
+        /* ==========================
+           HEADER & NAVBAR (আপডেট করা)
+        ========================== */
         .header {
             background-color: #ffffff;
             padding: 10px 0;
+            position: relative; /* মোবাইল মেন্যুর জন্য জরুরি */
+            z-index: 100;
         }
 
         .navbar {
@@ -111,6 +116,16 @@
 
         .signout-btn:hover {
             box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.2), inset -3px -3px 7px rgba(255, 255, 255, 0.1);
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: #000000;
+            font-size: 24px;
+            cursor: pointer;
+            margin-left: 15px;
         }
 
         /* ==========================
@@ -412,27 +427,84 @@
             color: var(--primary);
             display: none;
         }
+
+        /* ======================================= */
+        /* ✅ NEW: Media Queries for Responsiveness */
+        /* ======================================= */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-wrap: wrap;
+            }
+
+            .menu-toggle {
+                display: block;
+                order: 3;
+            }
+
+            .auth-buttons {
+                order: 2;
+            }
+            
+            .logo {
+                order: 1;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: #ffffff;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                padding: 20px 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+                border-radius: 0 0 8px 8px;
+                order: 4;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-links a {
+                padding: 15px;
+                display: block;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Consistent Header -->
+    <!-- HEADER (মোবাইল মেন্যুর জন্য আপডেট করা) -->
     <header class="header">
         <div class="container">
             <nav class="navbar">
                 <a href="index1.html" class="logo">
                     <span class="logo-icon">IT</span> Collaboration BD
                 </a>
-                <ul class="nav-links">
+                
+                <ul class="nav-links" id="nav-menu">
                     <li><a href="index1.html">Home</a></li>
                     <li><a href="project.html">Project</a></li>
                     <li><a href="explore.html">Explore</a></li>
                     <li><a href="contact.html">Contact us</a></li>
                     <li><a href="about.html">About us</a></li>
                 </ul>
+                
                 <div class="auth-buttons">
                     <button id="signoutBtn" class="signout-btn">Sign out</button>
                 </div>
+                
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
             </nav>
         </div>
     </header>
@@ -498,6 +570,28 @@
             </div>
         </div>
     </div>
+    
+    <!-- মোবাইল মেন্যু স্ক্রিপ্ট -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            const menuIcon = menuToggle.querySelector('i');
+
+            if (menuToggle && navMenu) {
+                menuToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                    if (navMenu.classList.contains('active')) {
+                        menuIcon.classList.remove('fa-bars');
+                        menuIcon.classList.add('fa-times');
+                    } else {
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    }
+                });
+            }
+        });
+    </script>
 
     <!-- Firebase Configuration & Logic -->
     <script type="module">
@@ -520,12 +614,11 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // ==========================================
-        //  STATE & VARIABLES
-        // ==========================================
+        // ...বাকি সমস্ত Firebase এবং PDF এর জাভাস্ক্রিপ্ট কোড এখানে অপরিবর্তিত আছে...
+
         let resources = [];
         let currentUser = null;
-        let pdfFieldKey = 'pdf_default'; // Default key if no playlist param
+        let pdfFieldKey = 'pdf_default';
 
         const mainContainer = document.getElementById('mainContainer');
         const emptyState = document.getElementById('emptyState');
@@ -534,25 +627,17 @@
         const viewerModal = document.getElementById('viewerModal');
         const categoryListDatalist = document.getElementById('categoryList');
         const playlistTitleEl = document.getElementById('playlistTitle');
-
         const inCategory = document.getElementById('itemCategory');
         const inTitle = document.getElementById('itemTitle');
         const inLink = document.getElementById('itemLink');
         const inPoster = document.getElementById('itemPoster');
         const viewerBody = document.getElementById('viewerBody');
 
-        // ==========================================
-        //  INITIALIZATION
-        // ==========================================
         document.addEventListener('DOMContentLoaded', () => {
-            // URL থেকে Playlist ID নেওয়া
             const urlParams = new URLSearchParams(window.location.search);
             const idFromUrl = urlParams.get('playlist');
-
             if (idFromUrl) {
-                // ডায়নামিক কী তৈরি করা (যেমন: pdf_html, pdf_css)
                 pdfFieldKey = `pdf_${idFromUrl}`; 
-                
                 const formattedTitle = idFromUrl.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' Library';
                 playlistTitleEl.textContent = formattedTitle;
             } else {
@@ -560,9 +645,6 @@
             }
         });
 
-        // ==========================================
-        //  AUTH STATE LISTENER
-        // ==========================================
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
@@ -581,28 +663,17 @@
             });
         });
 
-        // ==========================================
-        //  EVENT LISTENERS
-        // ==========================================
         document.getElementById('openAddModalBtn').addEventListener('click', openAddModal);
         document.getElementById('cancelAddBtn').addEventListener('click', () => addModal.classList.remove('active'));
         document.getElementById('saveItemBtn').addEventListener('click', saveItem);
         document.getElementById('closeViewerBtn').addEventListener('click', closeViewer);
 
-        // ==========================================
-        //  FIRESTORE DATA HANDLING (DYNAMIC KEY)
-        // ==========================================
-        
         async function saveDataToFirestore() {
             if (!currentUser) return;
-            
             try {
-                // ডায়নামিক কী [pdfFieldKey] ব্যবহার করা হচ্ছে
-                // { merge: true } দেওয়া হয়েছে যাতে অন্য playlist এর ডাটা ডিলিট না হয়
                 await setDoc(doc(db, "users_data", currentUser.uid), {
                     [pdfFieldKey]: resources
                 }, { merge: true });
-                
                 renderGallery();
             } catch (error) {
                 console.error("Error saving data:", error);
@@ -612,17 +683,13 @@
 
         async function loadDataFromFirestore() {
             if (!currentUser) return;
-
             loadingIndicator.style.display = 'block';
             mainContainer.innerHTML = '';
-            
             try {
                 const docRef = doc(db, "users_data", currentUser.uid);
                 const docSnap = await getDoc(docRef);
-
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    // শুধুমাত্র বর্তমান Playlist এর ডাটা লোড করা
                     resources = data[pdfFieldKey] || [];
                 } else {
                     resources = [];
@@ -635,24 +702,18 @@
             }
         }
 
-        // ==========================================
-        //  RENDERING GALLERY (UI)
-        // ==========================================
         function renderGallery() {
             mainContainer.innerHTML = '';
             categoryListDatalist.innerHTML = '';
-
             if (resources.length === 0) {
                 emptyState.style.display = 'block';
                 return;
             }
             emptyState.style.display = 'none';
-
             resources.forEach((catGroup, catIndex) => {
                 const option = document.createElement('option');
                 option.value = catGroup.category;
                 categoryListDatalist.appendChild(option);
-
                 const catBlock = document.createElement('div');
                 catBlock.className = 'category-block';
                 catBlock.innerHTML = `
@@ -663,10 +724,8 @@
                         </div>
                     </div>
                     <div class="video-grid" id="grid-${catIndex}"></div>`;
-                
                 const grid = catBlock.querySelector(`#grid-${catIndex}`);
                 catBlock.querySelector('.delete-cat-btn').addEventListener('click', () => deleteCategory(catIndex));
-
                 catGroup.items.forEach((item, itemIndex) => {
                     const card = document.createElement('div');
                     card.className = 'video-card';
@@ -685,22 +744,17 @@
                                 <button class="action-btn delete-btn" title="Delete"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>`;
-                    
                     card.querySelector('.thumbnail-container').addEventListener('click', () => openViewer(item));
                     card.querySelector('.up-btn').addEventListener('click', () => moveItem(catIndex, itemIndex, -1));
                     card.querySelector('.down-btn').addEventListener('click', () => moveItem(catIndex, itemIndex, 1));
                     card.querySelector('.edit-btn').addEventListener('click', () => editItem(catIndex, itemIndex));
                     card.querySelector('.delete-btn').addEventListener('click', () => deleteItem(catIndex, itemIndex));
-
                     grid.appendChild(card);
                 });
                 mainContainer.appendChild(catBlock);
             });
         }
 
-        // ==========================================
-        //  CRUD LOGIC
-        // ==========================================
         function openAddModal() {
             addModal.classList.add('active');
             inCategory.value = ''; inTitle.value = ''; inLink.value = ''; inPoster.value = '';
@@ -710,20 +764,15 @@
             const categoryName = inCategory.value.trim();
             const title = inTitle.value.trim();
             let link = inLink.value.trim();
-            
             if (!categoryName || !title || !link) { alert("Please fill Category, Title and Link!"); return; }
-            
             if (link.includes("drive.google.com")) { link = convertDriveLink(link); }
-            
             const newItem = { title, src: link, poster: inPoster.value.trim() };
-            
             let catIndex = resources.findIndex(c => c.category.toLowerCase() === categoryName.toLowerCase());
             if (catIndex > -1) { 
                 resources[catIndex].items.push(newItem); 
             } else { 
                 resources.push({ category: categoryName, items: [newItem] }); 
             }
-            
             saveDataToFirestore();
             addModal.classList.remove('active');
         }
@@ -760,17 +809,12 @@
             }
         }
 
-        // ==========================================
-        //  VIEWER LOGIC
-        // ==========================================
         function openViewer(item) {
             const url = item.src;
             viewerBody.innerHTML = '';
-            
             const iframe = document.createElement('iframe');
             iframe.src = url;
             viewerBody.appendChild(iframe);
-            
             document.getElementById('toolDownload').href = url;
             viewerModal.classList.add('active');
         }

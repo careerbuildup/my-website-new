@@ -15,6 +15,12 @@
                 <a href="index1.html" class="logo">
                     <span class="logo-icon">IT</span> Collaboration BD
                 </a>
+
+                <!-- ✅ NEW: Hamburger Icon for mobile -->
+                <div class="hamburger-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+
                 <ul class="nav-links">
                     <li><a href="index1.html">Home</a></li>
                     <li><a href="project.html">Project</a></li>
@@ -77,16 +83,36 @@
             <p class="copyright">&copy; 2026 IT Collaboration BD. All rights reserved.</p>
             <div class="social-icons">
                 <a href="https://t.me/itcollaborationbd"><i class="fab fa-telegram"></i></a>
-            <a href="https://wa.me/8801824373372"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://mail.google.com/mail/?view=cm&to=careerbuildup12@gmail.com"><i class="fas fa-envelope"></i></a>
-            <a href="https://www.tiktok.com/@itcollaborationbd"><i class="fab fa-tiktok"></i></a>
-            <a href="https://www.facebook.com/share/1DFqyCg11M/"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.linkedin.com/in/it-collaboration-bd-92070a3b0?utm_source=share_via&utm_content=profile&utm_medium=member_android"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://x.com/CareerBuildup12"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.youtube.com/@itcollaborationbd"><i class="fab fa-youtube"></i></a>
-            <a href="https://www.instagram.com/rockygraphics1209?igsh=MW13bGsyN2dyNjFyZQ=="><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/8801824373372"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://mail.google.com/mail/?view=cm&to=careerbuildup12@gmail.com"><i class="fas fa-envelope"></i></a>
+                <a href="https://www.tiktok.com/@itcollaborationbd"><i class="fab fa-tiktok"></i></a>
+                <a href="https://www.facebook.com/share/1DFqyCg11M/"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.linkedin.com/in/it-collaboration-bd-92070a3b0?utm_source=share_via&utm_content=profile&utm_medium=member_android"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://x.com/CareerBuildup12"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.youtube.com/@itcollaborationbd"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.instagram.com/rockygraphics1209?igsh=MW13bGsyN2dyNjFyZQ=="><i class="fab fa-instagram"></i></a>
             </div>
         </div>
     </footer>
+
+    <!-- ✅ NEW: JavaScript for Hamburger Menu -->
+    <script>
+        const hamburger = document.querySelector('.hamburger-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            
+            // Change hamburger icon to close icon (X)
+            const icon = hamburger.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+    </script>
 </body>
 </html>
