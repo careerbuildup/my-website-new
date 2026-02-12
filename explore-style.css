@@ -259,7 +259,7 @@ body {
 
 .social-icons {
     display: flex;
-    gap: 10px;
+    gap: 7px;
     flex-wrap: wrap;
     justify-content: center;
 }

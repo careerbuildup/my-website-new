@@ -88,7 +88,7 @@ body {
     gap: 10px;
 }
 
-.login-btn {
+/* .login-btn {
     text-decoration: none;
     color: #000000;
     font-weight: 500;
@@ -104,9 +104,9 @@ body {
 .login-btn:hover {
     box-shadow: inset 5px 5px 10px #dee2e6,
                 inset -5px -5px 10px #ffffff;
-}
+} */
 
-.signup-btn {
+.login-btn {
     text-decoration: none;
     background-color: #4263eb;
     color: #fff;
@@ -119,7 +119,7 @@ body {
     transition: all 0.3s ease;
 }
 
-.signup-btn:hover {
+.login-btn:hover {
     box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.2),
                 inset -3px -3px 7px rgba(255, 255, 255, 0.1);
 }
@@ -202,7 +202,7 @@ body {
 
 .social-icons {
     display: flex;
-    gap: 10px;
+    gap: 7px;
 }
 
 .social-icons a {

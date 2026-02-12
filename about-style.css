@@ -186,7 +186,7 @@ body {
 
 .social-icons {
     display: flex;
-    gap: 10px;
+    gap: 7px;
     flex-wrap: wrap; /* Allow icons to wrap on small screens */
     justify-content: center; /* Center icons when wrapped */
 }
