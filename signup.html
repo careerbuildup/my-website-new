@@ -12,33 +12,27 @@
         <div class="signup-container">
             <h2>Create Your Account</h2>
             
-            <!-- Form ID যুক্ত করা হয়েছে -->
             <form id="signup-form" action="#">
                 <div class="name-group">
                     <div class="input-group">
                         <i class="fas fa-user"></i>
-                        <!-- ID: fname -->
                         <input type="text" id="fname" placeholder="First Name" required>
                     </div>
                     <div class="input-group">
                         <i class="fas fa-user"></i>
-                        <!-- ID: lname -->
                         <input type="text" id="lname" placeholder="Last Name" required>
                     </div>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-envelope"></i>
-                    <!-- ID: email-signup -->
                     <input type="email" id="email-signup" placeholder="Email Address" required>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-user-circle"></i>
-                    <!-- ID: username -->
                     <input type="text" id="username" placeholder="Username" required>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <!-- ID: pass-signup -->
                     <input type="password" id="pass-signup" placeholder="Password" required>
                     <span class="toggle-password">
                         <i class="fas fa-eye-slash"></i>
@@ -46,7 +40,6 @@
                 </div>
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <!-- ID: repass-signup -->
                     <input type="password" id="repass-signup" placeholder="Retype Password" required>
                     <span class="toggle-password">
                         <i class="fas fa-eye-slash"></i>
@@ -54,7 +47,6 @@
                 </div>
                 <div class="terms-group">
                     <label class="agree-terms">
-                        <!-- ID: terms-check -->
                         <input type="checkbox" id="terms-check" class="checkbox">
                         I agree to the <a href="#">Terms & Conditions</a>
                     </label>
@@ -69,7 +61,7 @@
         <a href="index.html" class="back-to-home">&larr; Back to Home</a>
     </div>
 
-    <!-- টগল পাসওয়ার্ড স্ক্রিপ্ট (আপনার অরিজিনাল) -->
+    <!-- UI Script for Toggle Password -->
     <script>
     const togglePasswordIcons = document.querySelectorAll('.toggle-password');
 
@@ -87,7 +79,7 @@
     });
     </script>
 
-    <!-- ফায়ারবেস কোড -->
+    <!-- Firebase Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -108,11 +100,11 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Signup Logic
+        // Sign Up Event Listener
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // পেজ রিলোড বন্ধ করা
 
-            // Get values
+            // ইনপুট ভ্যালু নেওয়া
             const fname = document.getElementById('fname').value;
             const lname = document.getElementById('lname').value;
             const email = document.getElementById('email-signup').value;
@@ -121,44 +113,65 @@
             const repassword = document.getElementById('repass-signup').value;
             const terms = document.getElementById('terms-check').checked;
 
-            // Password check
+            // পাসওয়ার্ড ম্যাচিং চেক
             if (password !== repassword) {
-                alert("Passwords do not match!");
+                alert("Passwords do not match! (পাসওয়ার্ড মিলছে না)");
                 return;
             }
 
-            // Terms check
+            // পাসওয়ার্ড লেংথ চেক (Firebase এর জন্য অন্তত ৬ সংখ্যা লাগে)
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters long.");
+                return;
+            }
+
+            // টার্মস চেকবক্স চেক
             if (!terms) {
-                alert("Please agree to the Terms & Conditions.");
+                alert("Please agree to the Terms & Conditions first.");
                 return;
             }
 
             try {
-                // Create user in Firebase Auth
+                // ১. ফায়ারবেসে ইউজার তৈরি করা
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                // Update Profile Name
+                // ২. ইউজারের ডিসপ্লে নাম আপডেট করা
                 await updateProfile(user, {
                     displayName: fname + " " + lname
                 });
 
-                // Store extra data in Firestore Database
+                // ৩. অতিরিক্ত তথ্য ডাটাবেসে সেভ করা (Firestore)
                 await setDoc(doc(db, "users", user.uid), {
                     firstName: fname,
                     lastName: lname,
                     username: username,
                     email: email,
-                    uid: user.uid
+                    uid: user.uid,
+                    createdAt: new Date()
                 });
 
-                alert("Account created successfully!");
-                // Redirect to Login Page
+                // ৪. সফল হলে মেসেজ এবং রিডাইরেক্ট
+                alert("Account created successfully! Redirecting to Login page...");
+                
+                // লগইন পেজে নিয়ে যাওয়া
                 window.location.href = "login.html";
 
             } catch (error) {
-                alert("Error: " + error.message);
-                console.error(error);
+                // ৫. এরর হ্যান্ডলিং (Error Handling)
+                const errorCode = error.code;
+                
+                if (errorCode === 'auth/email-already-in-use') {
+                    alert("This email is already in use. Please use a different email or Log in.\n(এই ইমেইল দিয়ে ইতিমধ্যে একাউন্ট খোলা আছে।)");
+                } else if (errorCode === 'auth/invalid-email') {
+                    alert("Invalid Email Address.\n(ইমেইল এড্রেসটি সঠিক নয়।)");
+                } else if (errorCode === 'auth/weak-password') {
+                    alert("Password is too weak.\n(পাসওয়ার্ডটি খুব দুর্বল, অন্তত ৬ সংখ্যার দিন।)");
+                } else {
+                    // অন্য কোনো সমস্যা হলে
+                    alert("Error: " + error.message);
+                }
+                console.error("Firebase Error:", error);
             }
         });
     </script>
