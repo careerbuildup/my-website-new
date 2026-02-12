@@ -1,81 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account - IT Collaboration</title>
-    <link rel="stylesheet" href="signup-style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <title>Sign Up</title>
 </head>
 <body>
-    <div class="signup-wrapper">
-        <div class="signup-container">
-            <h2>Create Your Account</h2>
-            <form action="#">
-                <div class="name-group">
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" placeholder="First Name" required>
-                    </div>
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" placeholder="Last Name" required>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" placeholder="Email Address" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-user-circle"></i>
-                    <input type="text" placeholder="Username" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Password" required>
-                    <span class="toggle-password">
-                        <i class="fas fa-eye-slash"></i>
-                    </span>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Retype Password" required>
-                    <span class="toggle-password">
-                        <i class="fas fa-eye-slash"></i>
-                    </span>
-                </div>
-                <div class="terms-group">
-                    <label class="agree-terms">
-                        <input type="checkbox" class="checkbox">
-                        I agree to the <a href="#">Terms & Conditions</a>
-                    </label>
-                </div>
-                <button type="submit" class="signup-btn">Sign Up</button>
-            </form>
-            <p class="login-link">
-                Already have an account? <a href="login.html">Sign In</a>
-            </p>
-        </div>
-        <a href="index.html" class="back-to-home">&larr; Back to Home</a>
-    </div>
 
-    <script>
-    // সব toggle-password span নেবে
-    const togglePasswordIcons = document.querySelectorAll('.toggle-password');
+<h2>Create Account</h2>
 
-    togglePasswordIcons.forEach(icon => {
-        icon.addEventListener('click', () => {
-            // পাশের input ফিল্ড খুঁজবে
-            const passwordInput = icon.previousElementSibling;
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.innerHTML = '<i class="fas fa-eye"></i>';
-            } else {
-                passwordInput.type = 'password';
-                icon.innerHTML = '<i class="fas fa-eye-slash"></i>';
-            }
-        });
+<form id="signupForm">
+  <input type="text" id="firstName" placeholder="First Name" required><br><br>
+  <input type="text" id="lastName" placeholder="Last Name" required><br><br>
+  <input type="email" id="email" placeholder="Email" required><br><br>
+  <input type="text" id="username" placeholder="Username" required><br><br>
+  <input type="password" id="password" placeholder="Password" required><br><br>
+
+  <label>
+    <input type="checkbox" id="terms">
+    I agree to Terms & Conditions
+  </label><br><br>
+
+  <button type="submit">Sign Up</button>
+</form>
+
+<p>Already have account? <a href="login.html">Login</a></p>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "YOUR_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const form = document.getElementById("signupForm");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const firstName = document.getElementById("firstName").value;
+  const lastName = document.getElementById("lastName").value;
+  const email = document.getElementById("email").value;
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  const terms = document.getElementById("terms").checked;
+
+  if(!terms){
+    alert("You must agree to Terms & Conditions");
+    return;
+  }
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    await setDoc(doc(db, "users", user.uid), {
+      firstName,
+      lastName,
+      email,
+      username
     });
+
+    alert("Signup Successful!");
+    window.location.href = "login.html";
+
+  } catch(error){
+    alert(error.message);
+  }
+});
 </script>
 
 </body>
