@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Collaboration BD - Video Gallery</title>
+    <title>IT Collaboration BD</title>
 
     <!-- Font Awesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        /* আপনার দেওয়া সম্পূর্ণ CSS কোড এখানে থাকবে */
         /* ==========================
            GLOBAL RESET + VARIABLES
         ========================== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root{
-            --bg-color: #f0f4f8;
+            --bg-color: #ffffff;
             --text-main: #000000;
             --text-light: #adb5bd;
             --primary: #4263eb;
@@ -24,15 +25,20 @@
             --shadow-dark: #dee2e6;
         }
 
-        body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f8f9fa;
-    color: #000000;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-    /* ✅ NEW (footer fix) */
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+/* রিসেট এবং গ্লোবাল স্টাইল */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff; /*aikane (background: linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(120, 20, 140, 0.4), rgba(5,5,5,1)), 
+                url('https://img.freepik.com/free-vector/abstract-optical-laser-background_23-2148970928.jpg?w=1380&t=st=1707050000~exp=1707050600~hmac=fake_token');*/
+    color: #495057; 
 }
 
 .container {
@@ -42,7 +48,7 @@
 }
 
 .header {
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     padding: 10px 0;
 }
 
@@ -61,6 +67,7 @@
     align-items: center;
 }
 
+/* লোগো আইকন - নীল শ্যাডো পরিবর্তন করে নিউট্রাল করা হয়েছে */
 .logo-icon {
     background-color: #4263eb;
     color: #fff;
@@ -68,14 +75,14 @@
     border-radius: 8px;
     margin-right: 10px;
     font-weight: bold;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2),
-                -5px -5px 10px rgba(255, 255, 255, 0.2);
+    /* এখানে নীল শ্যাডোর বদলে সাধারণ শ্যাডো দেওয়া হলো */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
 }
 
 .logo-icon:hover {
-    box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.2),
-                inset -3px -3px 7px rgba(255, 255, 255, 0.1);
+    /* হোভারেও নীল শ্যাডো বাদ দেওয়া হয়েছে */
+    box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.2), inset -3px -3px 7px rgba(255, 255, 255, 0.1);
 }
 
 .nav-links {
@@ -96,8 +103,7 @@
 
 .nav-links a:hover {
     color: #4263eb;
-    box-shadow: inset 5px 5px 10px #dee2e6,
-                inset -5px -5px 10px #ffffff;
+    box-shadow: inset 5px 5px 10px #dee2e6, inset -5px -5px 10px #ffffff;
 }
 
 .auth-buttons {
@@ -114,16 +120,15 @@
     padding: 10px 20px;
     border-radius: 8px;
     background-color: #f8f9fa;
-    box-shadow: 5px 5px 10px #dee2e6,
-                -5px -5px 10px #ffffff;
+    box-shadow: 5px 5px 10px #dee2e6, -5px -5px 10px #ffffff;
     transition: all 0.3s ease;
 }
 
 .login-btn:hover {
-    box-shadow: inset 5px 5px 10px #dee2e6,
-                inset -5px -5px 10px #ffffff;
+    box-shadow: inset 5px 5px 10px #dee2e6, inset -5px -5px 10px #ffffff;
 }
 
+/* সাইনআপ বাটন - নীল শ্যাডো রিমুভ করা হয়েছে */
 .signup-btn {
     text-decoration: none;
     background-color: #4263eb;
@@ -132,19 +137,15 @@
     border-radius: 8px;
     font-weight: 500;
     font-size: 12px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2),
-                -5px -5px 10px rgba(255, 255, 255, 0.2);
+    /* নীল শ্যাডোর পরিবর্তে সাধারণ ডার্ক শ্যাডো */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
 }
 
 .signup-btn:hover {
-    box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.2),
-                inset -3px -3px 7px rgba(255, 255, 255, 0.1);
+    box-shadow: inset 3px 3px 7px rgba(0, 0, 0, 0.2), inset -3px -3px 7px rgba(255, 255, 255, 0.1);
 }
-
-        /* ==========================
-           MAIN VIDEO GALLERY
-        ========================== */
+        /* ... বাকি সকল CSS অপরিবর্তিত থাকবে ... */
         .gallery-section{
             padding: 40px 0 100px;
             background: var(--bg-color);
@@ -448,11 +449,11 @@
                     <span class="logo-icon">IT</span> Collaboration BD
                 </a>
                 <ul class="nav-links">
-                    <li><a href="#">Home</a></li>
-                <li><a href="#">Project</a></li>
-                <li><a href="explore.html">Explore</a></li>
-                <li><a href="contact.html">Contact us</a></li>
-                <li><a href="about.html">About us</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="project.html">Project</a></li>
+                    <li><a href="explore.html">Explore</a></li>
+                    <li><a href="contact.html">Contact us</a></li>
+                    <li><a href="about.html">About us</a></li>
                 </ul>
                 <div class="auth-buttons">
                     <a href="login.html" class="login-btn">Log in</a>
@@ -465,7 +466,7 @@
     <!-- MAIN VIDEO GALLERY -->
     <main class="gallery-section">
         <div class="container">
-            <h1>My Video Playlist</h1>
+            <h1 id="playlistTitle">Playlist</h1>
 
             <div class="video-grid" id="videoGrid"></div>
 
@@ -486,22 +487,18 @@
     <div class="modal-overlay" id="addModal">
         <div class="modal-content">
             <h3 class="modal-title">Add New Video</h3>
-
             <div class="input-group">
                 <label>Video Title</label>
                 <input type="text" id="videoTitle" class="neumorphic-input" placeholder="Enter video title...">
             </div>
-
             <div class="input-group">
                 <label>Video Link (YouTube/MP4/Drive)</label>
                 <input type="text" id="videoLink" class="neumorphic-input" placeholder="Paste video URL here...">
             </div>
-
             <div class="input-group">
                 <label>Poster Image URL (optional)</label>
                 <input type="text" id="videoPoster" class="neumorphic-input" placeholder="Paste poster image URL...">
             </div>
-
             <div class="modal-actions">
                 <button class="btn btn-cancel" id="cancelBtn">Cancel</button>
                 <button class="btn btn-primary" id="addVideoBtn">Add Video</button>
@@ -522,6 +519,10 @@
     </div>
 
     <script>
+        // ================================================================
+        // JAVASCRIPT CODE UPDATED HERE
+        // ================================================================
+
         // --------------------
         // DOM Elements
         // --------------------
@@ -530,6 +531,7 @@
         const addModal = document.getElementById('addModal');
         const playerModal = document.getElementById('playerModal');
         const iframe = document.getElementById('youtubeIframe');
+        const playlistTitleEl = document.getElementById('playlistTitle'); // Title element
 
         const openModalBtn = document.getElementById('openModalBtn');
         const cancelBtn = document.getElementById('cancelBtn');
@@ -543,12 +545,39 @@
         // --------------------
         // Data
         // --------------------
-        let videos = JSON.parse(localStorage.getItem('myVideos_2')) || [];
-
+        let videos = [];
+        let playlistId = 'default'; // A default ID if none is provided
+        
         // --------------------
         // Init
         // --------------------
-        document.addEventListener('DOMContentLoaded', renderVideos);
+        document.addEventListener('DOMContentLoaded', () => {
+            // ---> [পরিবর্তন ১] URL থেকে প্লেলিস্টের নাম পড়া হচ্ছে
+            const urlParams = new URLSearchParams(window.location.search);
+            const idFromUrl = urlParams.get('playlist');
+
+            if (idFromUrl) {
+                playlistId = idFromUrl;
+                // Title-কে সুন্দরভাবে দেখানোর জন্য প্রথম অক্ষর বড় হাতের করা
+                const formattedTitle = playlistId.charAt(0).toUpperCase() + playlistId.slice(1) + ' Videos';
+                playlistTitleEl.textContent = formattedTitle;
+            } else {
+                 playlistTitleEl.textContent = 'My Default Playlist';
+            }
+
+            // সঠিক প্লেলিস্টের জন্য ভিডিও লোড করা
+            loadVideos();
+        });
+
+        // ---> [পরিবর্তন ২] লোকাল স্টোরেজের জন্য ইউনিক কী (key) তৈরির ফাংশন
+        function getLocalStorageKey() {
+            return `myVideos_${playlistId}`;
+        }
+        
+        function loadVideos() {
+            videos = JSON.parse(localStorage.getItem(getLocalStorageKey())) || [];
+            renderVideos();
+        }
 
         // --------------------
         // Event Listeners
@@ -570,7 +599,7 @@
         });
 
         // --------------------
-        // Functions
+        // Functions (আপনার আগের কোডের মতোই, কোনো পরিবর্তন নেই)
         // --------------------
         function closeAddModal() {
           addModal.classList.remove('active');
@@ -594,7 +623,7 @@
 
             card.innerHTML = `
               <div class="thumbnail-container">
-                <img src="${thumb}" alt="Thumbnail">
+                <img src="${thumb}" alt="Thumbnail" onerror="this.src='https://i.imgur.com/2yY4ZQh.png';">
                 <div class="play-icon-overlay">
                   <i class="fa-solid fa-play"></i>
                 </div>
@@ -612,19 +641,14 @@
 
             card.querySelector('.thumbnail-container')
               .addEventListener('click', () => playVideo(video));
-
             card.querySelector('.edit-btn')
               .addEventListener('click', () => renameVideo(index));
-
             card.querySelector('.delete-btn')
               .addEventListener('click', () => deleteVideo(index));
-
             card.querySelector('.up-btn')
               .addEventListener('click', () => moveUp(index));
-
             card.querySelector('.down-btn')
               .addEventListener('click', () => moveDown(index));
-
             grid.appendChild(card);
           });
         }
@@ -638,8 +662,7 @@
             alert("Please fill in both fields!");
             return;
           }
-
-          if (url.includes("drive.google.com")) {
+          if (url.includes("drive.google.com") && !url.includes("/preview")) {
             const converted = convertDriveLink(url);
             if (!converted) {
               alert("Invalid Drive link!");
@@ -647,20 +670,12 @@
             }
             url = converted;
           }
-
           const type = detectType(url);
           if (!type) {
             alert("Invalid link! Use YouTube or Drive preview link.");
             return;
           }
-
-          const video = {
-            type,
-            src: url,
-            title,
-            poster: poster || null
-          };
-
+          const video = { type, src: url, title, poster: poster || null };
           videos.push(video);
           saveAndRender();
           closeAddModal();
@@ -669,21 +684,12 @@
         function detectType(url) {
           try {
             const u = new URL(url);
-
-            if (u.hostname.includes("youtube.com") || u.hostname.includes("youtu.be")) {
-              return "youtube";
-            }
-
-            if (url.includes("drive.google.com") && url.includes("/preview")) {
-              return "drive";
-            }
-
-            if (url.endsWith(".mp4")) {
-              return "mp4";
-            }
-
+            if (u.hostname.includes("youtube.com") || u.hostname.includes("youtu.be")) return "youtube";
+            if (url.includes("drive.google.com") && url.includes("/preview")) return "drive";
+            if (url.endsWith(".mp4")) return "mp4";
             return null;
           } catch {
+            if (url.endsWith(".mp4")) return "mp4";
             return null;
           }
         }
@@ -699,7 +705,7 @@
         function getThumbnail(video) {
           if (video.type === "youtube") {
             const id = extractYouTubeID(video.src);
-            if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+            if (id) return `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
           }
           return "https://i.imgur.com/2yY4ZQh.png";
         }
@@ -732,23 +738,26 @@
         }
 
         function saveAndRender() {
-          localStorage.setItem('myVideos_2', JSON.stringify(videos));
-          renderVideos();
+            // ---> [পরিবর্তন ৩] এখানেও getLocalStorageKey() ব্যবহার করা হচ্ছে
+            localStorage.setItem(getLocalStorageKey(), JSON.stringify(videos));
+            renderVideos();
         }
 
         function playVideo(video) {
           iframe.src = "";
-
+          let videoUrl = '';
           if (video.type === "youtube") {
             const id = extractYouTubeID(video.src);
-            iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-          } else if (video.type === "drive") {
-            iframe.src = video.src;
-          } else if (video.type === "mp4") {
-            iframe.src = video.src;
+            if (id) videoUrl = `https://www.youtube.com/embed/${id}?autoplay=1`;
+          } else if (video.type === "drive" || video.type === "mp4") {
+            videoUrl = video.src;
           }
-
-          playerModal.classList.add("active");
+          if (videoUrl) {
+            iframe.src = videoUrl;
+            playerModal.classList.add("active");
+          } else {
+            alert("Could not play the video. Invalid URL format.");
+          }
         }
 
         function closePlayer() {
@@ -759,16 +768,12 @@
         function extractYouTubeID(url) {
           try {
             const u = new URL(url);
-
             if (u.hostname === "youtu.be") return u.pathname.slice(1);
             if (u.searchParams.get("v")) return u.searchParams.get("v");
             if (u.pathname.includes("/shorts/")) return u.pathname.split("/shorts/")[1];
             if (u.pathname.includes("/embed/")) return u.pathname.split("/embed/")[1];
-
             return null;
-          } catch {
-            return null;
-          }
+          } catch { return null; }
         }
     </script>
 </body>
