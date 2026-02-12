@@ -3,87 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account - IT Collaboration</title>
-    <link rel="stylesheet" href="signup-style.css">
+    <title>Login - IT Collaboration</title>
+    <link rel="stylesheet" href="login-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-    <div class="signup-wrapper">
-        <div class="signup-container">
-            <h2>Create Your Account</h2>
+    <div class="login-wrapper">
+        <div class="login-container">
+            <h2>Welcome Back</h2>
             
-            <form id="signup-form" action="#">
-                <div class="name-group">
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="fname" placeholder="First Name" required>
-                    </div>
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="lname" placeholder="Last Name" required>
-                    </div>
-                </div>
+            <form id="login-form" action="#">
                 <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="email-signup" placeholder="Email Address" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-user-circle"></i>
-                    <input type="text" id="username" placeholder="Username" required>
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="email-login" placeholder="Email Address" required>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <input type="password" id="pass-signup" placeholder="Password" required>
+                    <input type="password" id="pass-login" placeholder="Password" required>
                     <span class="toggle-password">
                         <i class="fas fa-eye-slash"></i>
                     </span>
                 </div>
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="repass-signup" placeholder="Retype Password" required>
-                    <span class="toggle-password">
-                        <i class="fas fa-eye-slash"></i>
-                    </span>
-                </div>
-                <div class="terms-group">
-                    <label class="agree-terms">
-                        <input type="checkbox" id="terms-check" class="checkbox">
-                        I agree to the <a href="#">Terms & Conditions</a>
+                <div class="options">
+                    <label class="remember-me">
+                        <input type="checkbox" class="checkbox">
+                        Remember Me
                     </label>
+                    <a href="#" id="forgot-btn" class="forgot-password">Forgot Password?</a>
                 </div>
-                <button type="submit" class="signup-btn">Sign Up</button>
+                <button type="submit" class="signin-btn">Sign In</button>
             </form>
             
-            <p class="login-link">
-                Already have an account? <a href="login.html">Sign In</a>
+            <p class="signup-link">
+                Don't have an account? <a href="signup.html">Sign Up</a>
             </p>
         </div>
         <a href="index.html" class="back-to-home">&larr; Back to Home</a>
     </div>
 
-    <!-- UI Script for Toggle Password -->
+    <!-- UI Script -->
     <script>
-    const togglePasswordIcons = document.querySelectorAll('.toggle-password');
+        const togglePassword = document.querySelector(".toggle-password");
+        const passwordInput = document.getElementById("pass-login");
+        const icon = togglePassword.querySelector("i");
 
-    togglePasswordIcons.forEach(icon => {
-        icon.addEventListener('click', () => {
-            const passwordInput = icon.previousElementSibling;
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.innerHTML = '<i class="fas fa-eye"></i>';
+        togglePassword.addEventListener("click", () => {
+            if(passwordInput.type === "password"){
+                passwordInput.type = "text";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
             } else {
-                passwordInput.type = 'password';
-                icon.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                passwordInput.type = "password";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
             }
         });
-    });
     </script>
 
-    <!-- Firebase Logic -->
+    <!-- Firebase Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBHV3LF6IVV9j6Mbj45alh7ZM1umTt5T_s",
@@ -95,84 +75,57 @@
             measurementId: "G-MD3WBCZVLT"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
 
-        // Sign Up Event Listener
-        document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault(); // পেজ রিলোড বন্ধ করা
+        // Login Logic with Verification Check
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
 
-            // ইনপুট ভ্যালু নেওয়া
-            const fname = document.getElementById('fname').value;
-            const lname = document.getElementById('lname').value;
-            const email = document.getElementById('email-signup').value;
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('pass-signup').value;
-            const repassword = document.getElementById('repass-signup').value;
-            const terms = document.getElementById('terms-check').checked;
+            const email = document.getElementById('email-login').value;
+            const password = document.getElementById('pass-login').value;
 
-            // পাসওয়ার্ড ম্যাচিং চেক
-            if (password !== repassword) {
-                alert("Passwords do not match! (পাসওয়ার্ড মিলছে না)");
-                return;
-            }
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
 
-            // পাসওয়ার্ড লেংথ চেক (Firebase এর জন্য অন্তত ৬ সংখ্যা লাগে)
-            if (password.length < 6) {
-                alert("Password must be at least 6 characters long.");
-                return;
-            }
-
-            // টার্মস চেকবক্স চেক
-            if (!terms) {
-                alert("Please agree to the Terms & Conditions first.");
-                return;
-            }
-
-            try {
-                // ১. ফায়ারবেসে ইউজার তৈরি করা
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // ২. ইউজারের ডিসপ্লে নাম আপডেট করা
-                await updateProfile(user, {
-                    displayName: fname + " " + lname
+                    // চেক করা হচ্ছে ইমেইল ভেরিফাইড কিনা
+                    if (user.emailVerified) {
+                        // ভেরিফাইড হলে ড্যাশবোর্ডে যাবে
+                        window.location.href = "dashboard.html";
+                    } else {
+                        // ভেরিফাইড না হলে লগআউট করে দেবে এবং মেসেজ দেবে
+                        signOut(auth);
+                        alert("Please verify your email address first!\nCheck your inbox for the verification link.");
+                    }
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    if (errorCode === 'auth/invalid-credential') {
+                        alert("Incorrect Email or Password.");
+                    } else {
+                        alert("Login Failed: " + error.message);
+                    }
                 });
+        });
 
-                // ৩. অতিরিক্ত তথ্য ডাটাবেসে সেভ করা (Firestore)
-                await setDoc(doc(db, "users", user.uid), {
-                    firstName: fname,
-                    lastName: lname,
-                    username: username,
-                    email: email,
-                    uid: user.uid,
-                    createdAt: new Date()
-                });
+        // Forgot Password Logic
+        document.getElementById('forgot-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email-login').value;
 
-                // ৪. সফল হলে মেসেজ এবং রিডাইরেক্ট
-                alert("Account created successfully! Redirecting to Login page...");
-                
-                // লগইন পেজে নিয়ে যাওয়া
-                window.location.href = "login.html";
+            if (!email) {
+                alert("Please enter your email address first.");
+                return;
+            }
 
-            } catch (error) {
-                // ৫. এরর হ্যান্ডলিং (Error Handling)
-                const errorCode = error.code;
-                
-                if (errorCode === 'auth/email-already-in-use') {
-                    alert("This email is already in use. Please use a different email or Log in.\n(এই ইমেইল দিয়ে ইতিমধ্যে একাউন্ট খোলা আছে।)");
-                } else if (errorCode === 'auth/invalid-email') {
-                    alert("Invalid Email Address.\n(ইমেইল এড্রেসটি সঠিক নয়।)");
-                } else if (errorCode === 'auth/weak-password') {
-                    alert("Password is too weak.\n(পাসওয়ার্ডটি খুব দুর্বল, অন্তত ৬ সংখ্যার দিন।)");
-                } else {
-                    // অন্য কোনো সমস্যা হলে
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    alert("Password reset email sent! Check your inbox.");
+                })
+                .catch((error) => {
                     alert("Error: " + error.message);
-                }
-                console.error("Firebase Error:", error);
-            }
+                });
         });
     </script>
 </body>
